@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดตามสถานะการแจ้งซ่อม - IT Support</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Kanit', sans-serif; }
+        .card-custom { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .header-bg { background: linear-gradient(135deg, #198754, #146c43); color: white; border-radius: 15px 15px 0 0; }
+        .badge-status { font-size: 0.95rem; padding: 8px 16px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container py-4" style="max-width: 600px;">
+    <div class="card card-custom">
+        <!-- Header -->
+        <div class="card-header header-bg text-center py-4">
+            <i class="fa-solid fa-magnifying-glass-chart fa-3x mb-2"></i>
+            <h4 class="mb-0 fw-bold">ติดตามสถานะการแจ้งซ่อม</h4>
+            <p class="small mb-0 opacity-75">ตรวจสอบความคืบหน้างานซ่อมคอมพิวเตอร์</p>
+        </div>
+
+        <div class="card-body p-4">
+            <!-- ค้นหาด้วย Ticket ID -->
+            <div class="input-group mb-4">
+                <input type="text" id="searchTicketId" class="form-control form-control-lg" placeholder="พิมพ์ รหัสแจ้งซ่อม (เช่น TK-1001)">
+                <button class="btn btn-success px-4" type="button" id="btnSearch">
+                    <i class="fa-solid fa-search me-1"></i> ค้นหา
+                </button>
+            </div>
+
+            <!-- ข้อความกำลังโหลด -->
+            <div id="loading" class="text-center py-4 d-none">
+                <div class="spinner-border text-success" role="status"></div>
+                <p class="mt-2 text-muted">กำลังดึงข้อมูลสถานะล่าสุด...</p>
+            </div>
+
+            <!-- ข้อความเมื่อไม่พบข้อมูล -->
+            <div id="notFound" class="alert alert-warning text-center d-none" role="alert">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>ไม่พบข้อมูลรหัสแจ้งซ่อมนี้ กรุณาตรวจสอบรหัสใหม่อีกครั้ง
+            </div>
+
+            <!-- การแสดงผลรายละเอียด Ticket -->
+            <div id="resultCard" class="card bg-light border-0 d-none">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <span class="fw-bold fs-5 text-primary" id="resTicketId">TK-XXXX</span>
+                        <span id="resStatusBadge" class="badge badge-status bg-secondary">กำลังตรวจสอบ</span>
+                    </div>
+
+                    <div class="row g-2 small text-secondary mb-3">
+                        <div class="col-6"><i class="fa-solid fa-door-open me-1"></i> <strong>ห้อง:</strong> <span id="resRoom">-</span></div>
+                        <div class="col-6"><i class="fa-solid fa-desktop me-1"></i> <strong>เลขเครื่อง:</strong> <span id="resPc">-</span></div>
+                        <div class="col-12"><i class="fa-solid fa-user me-1"></i> <strong>ผู้แจ้ง:</strong> <span id="resReporter">-</span></div>
+                        <div class="col-12"><i class="fa-solid fa-clock me-1"></i> <strong>เวลาแจ้ง:</strong> <span id="resTime">-</span></div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded border mb-3">
+                        <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-wrench me-1"></i> อาการที่แจ้ง:</div>
+                        <p class="mb-0 text-muted small" id="resDetail">-</p>
+                    </div>
+
+                    <div class="p-3 bg-white rounded border">
+                        <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-user-gear me-1"></i> ช่างผู้ดูแล:</div>
+                        <p class="mb-0 fw-bold text-success" id="resTechnician">กำลังรอดำเนินการจัดสรรช่าง</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="index.html" class="text-decoration-none small text-secondary">
+                    <i class="fa-solid fa-arrow-left me-1"></i> กลับไปหน้าแจ้งซ่อม
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGbf7kEVTgms5GwfJDNTRkwNHXzv4cpA7xUIOSyJkjgQ6EAfsg8fMrumiSxfTkQBc/exec";
+
+    // เมื่อโหลดหน้าเว็บ ให้เช็คว่ามี Ticket ID ติดมาใน URL หรือไม่
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('ticketId');
+        if (ticketId) {
+            document.getElementById('searchTicketId').value = ticketId;
+            fetchTicketStatus(ticketId);
+        }
+    };
+
+    // ปุ่มกดค้นหา
+    document.getElementById('btnSearch').addEventListener('click', function() {
+        const ticketId = document.getElementById('searchTicketId').value.trim();
+        if (ticketId) {
+            fetchTicketStatus(ticketId);
+        } else {
+            alert("กรุณากรอกรหัสแจ้งซ่อม (Ticket ID)");
+        }
+    });
+
+    // ฟังก์ชันดึงข้อมูลสถานะจาก Apps Script
+    function fetchTicketStatus(ticketId) {
+        // ซ่อนหน้าจอผลลัพธ์เดิม
+        document.getElementById('resultCard').classList.add('d-none');
+        document.getElementById('notFound').classList.add('d-none');
+        document.getElementById('loading').classList.remove('d-none');
+
+        fetch(SCRIPT_URL + "?action=getStatus&ticketId=" + encodeURIComponent(ticketId))
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('loading').classList.add('d-none');
+            
+            if (data.status === "found") {
+                const item = data.data;
+                document.getElementById('resTicketId').innerText = item.ticketId;
+                document.getElementById('resRoom').innerText = item.room;
+                document.getElementById('resPc').innerText = item.pc;
+                document.getElementById('resReporter').innerText = item.reporter;
+                document.getElementById('resTime').innerText = item.timestamp;
+                document.getElementById('resDetail').innerText = item.detail;
+                document.getElementById('resTechnician').innerText = item.technician || "ยังไม่มีผู้รับเรื่อง";
+
+                // จัดการสีของ Badge ตามสถานะ
+                const badge = document.getElementById('resStatusBadge');
+                badge.innerText = item.repairStatus;
+                
+                if (item.repairStatus === "เสร็จสิ้น") {
+                    badge.className = "badge badge-status bg-success";
+                } else if (item.repairStatus === "กำลังดำเนินการ") {
+                    badge.className = "badge badge-status bg-warning text-dark";
+                } else if (item.repairStatus === "ยกเลิก") {
+                    badge.className = "badge badge-status bg-danger";
+                } else {
+                    badge.className = "badge badge-status bg-secondary";
+                }
+
+                document.getElementById('resultCard').classList.remove('d-none');
+            } else {
+                document.getElementById('notFound').classList.remove('d-none');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('loading').classList.add('d-none');
+            alert("เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง");
+        });
+    }
+</script>
+
+</body>
+</html>
