@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการการแจ้งซ่อม - IT Support Admin</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Kanit', sans-serif; }
+        .card-custom { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .header-bg { background: linear-gradient(135deg, #212529, #343a40); color: white; border-radius: 15px 15px 0 0; }
+        .badge-status { font-size: 0.85rem; padding: 6px 12px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+
+<!-- หน้า Login -->
+<div id="loginSection" class="container py-5" style="max-width: 450px;">
+    <div class="card card-custom">
+        <div class="card-header header-bg text-center py-4">
+            <i class="fa-solid fa-user-shield fa-3x mb-2 text-warning"></i>
+            <h4 class="mb-0 fw-bold">IT Support Admin</h4>
+            <p class="small mb-0 opacity-75">เข้าสู่ระบบจัดการรายการแจ้งซ่อม</p>
+        </div>
+        <div class="card-body p-4">
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">รหัสผ่านเจ้าหน้าที่</label>
+                    <input type="password" id="adminPassword" class="form-control form-control-lg" placeholder="กรอกรหัสผ่าน" required>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark btn-lg fw-bold">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>เข้าสู่ระบบ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- หน้า Dashboard รายการแจ้งซ่อม -->
+<div id="adminDashboard" class="container py-4 d-none" style="max-width: 950px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>รายการแจ้งซ่อมทั้งหมด</h3>
+            <p class="text-secondary small mb-0">จัดการสถานะและมอบหมายช่างผู้ดูแล</p>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary me-2" onclick="loadTickets()"><i class="fa-solid fa-rotate me-1"></i> รีเฟรช</button>
+            <button class="btn btn-outline-danger" onclick="logout()"><i class="fa-solid fa-power-off me-1"></i> ออกจากระบบ</button>
+        </div>
+    </div>
+
+    <!-- โหลดข้อมูล -->
+    <div id="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">กำลังดึงรายการแจ้งซ่อมล่าสุด...</p>
+    </div>
+
+    <!-- ตารางแสดงรายการ -->
+    <div id="tableContainer" class="card card-custom d-none">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Ticket ID / เวลา</th>
+                            <th>ตำแหน่ง</th>
+                            <th>ผู้แจ้ง / อาการ</th>
+                            <th>สถานะปัจจุบัน</th>
+                            <th>ช่างผู้ดูแล</th>
+                            <th class="text-center">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketTableBody">
+                        <!-- รายการจะมาเติมที่นี่ด้วย JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal สำหรับแก้ไขสถานะ -->
+<div class="modal fade" id="updateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content style-custom">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-header-title fw-bold" id="modalTicketTitle">อัปเดตสถานะ Ticket</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                    <input type="hidden" id="modalTicketId">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">เปลี่ยนสถานะการซ่อม</label>
+                        <select id="modalStatus" class="form-select form-select-lg" required>
+                            <option value="รอดำเนินการ">รอดำเนินการ</option>
+                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                            <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                            <option value="ยกเลิก">ยกเลิก</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">ชื่อช่างผู้รับผิดชอบ</label>
+                        <input type="text" id="modalTechnician" class="form-control" placeholder="เช่น ช่างสมศักดิ์ / IT-Team A" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" id="btnSaveUpdate" class="btn btn-success fw-bold">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> บันทึกการเปลี่ยนแปลง
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGbf7kEVTgms5GwfJDNTRkwNHXzv4cpA7xUIOSyJkjgQ6EAfsg8fMrumiSxfTkQBc/exec";
+    const ADMIN_PASS = "admin1234"; // 🔒 รหัสผ่านเข้าหน้า Admin (แก้ไขได้ที่นี่)
+
+    let updateModalObj;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateModalObj = new bootstrap.Modal(document.getElementById('updateModal'));
+        
+        // เช็กเซสชั่นการล็อกอิน
+        if (sessionStorage.getItem("adminLoggedIn") === "true") {
+            showDashboard();
+        }
+    });
+
+    // ล็อกอิน
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const pass = document.getElementById('adminPassword').value;
+        if (pass === ADMIN_PASS) {
+            sessionStorage.setItem("adminLoggedIn", "true");
+            showDashboard();
+        } else {
+            alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+    });
+
+    function logout() {
+        sessionStorage.removeItem("adminLoggedIn");
+        location.reload();
+    }
+
+    function showDashboard() {
+        document.getElementById('loginSection').classList.add('d-none');
+        document.getElementById('adminDashboard').classList.remove('d-none');
+        loadTickets();
+    }
+
+    // โหลดรายการแจ้งซ่อมทั้งหมด
+    function loadTickets() {
+        document.getElementById('loading').classList.remove('d-none');
+        document.getElementById('tableContainer').classList.add('d-none');
+
+        fetch(SCRIPT_URL + "?action=getAll")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('loading').classList.add('d-none');
+            if (data.status === "success") {
+                renderTable(data.data);
+                document.getElementById('tableContainer').classList.remove('d-none');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("ดึงข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+        });
+    }
+
+    // วาดตารางข้อมูล
+    function renderTable(tickets) {
+        const tbody = document.getElementById('ticketTableBody');
+        tbody.innerHTML = "";
+
+        if (tickets.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">ยังไม่มีรายการแจ้งซ่อม</td></tr>`;
+            return;
+        }
+
+        tickets.forEach(item => {
+            let badgeClass = "bg-secondary";
+            if (item.repairStatus === "เสร็จสิ้น") badgeClass = "bg-success";
+            else if (item.repairStatus === "กำลังดำเนินการ") badgeClass = "bg-warning text-dark";
+            else if (item.repairStatus === "ยกเลิก") badgeClass = "bg-danger";
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="ps-3">
+                    <strong class="text-primary">${item.ticketId}</strong><br>
+                    <small class="text-muted">${item.timestamp}</small>
+                </td>
+                <td>
+                    <span class="badge bg-light text-dark border">ห้อง: ${item.room}</span><br>
+                    <small class="text-secondary">เครื่อง: ${item.pc}</small>
+                </td>
+                <td>
+                    <strong>${item.reporter}</strong><br>
+                    <small class="text-muted" title="${item.detail}">${item.detail.length > 30 ? item.detail.substring(0, 30) + '...' : item.detail}</small>
+                </td>
+                <td><span class="badge badge-status ${badgeClass}">${item.repairStatus}</span></td>
+                <td><small class="fw-bold text-dark">${item.technician || "-"}</small></td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-dark" onclick="openUpdateModal('${item.ticketId}', '${item.repairStatus}', '${item.technician}')">
+                        <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // เปิด Modal แก้ไข
+    function openUpdateModal(ticketId, currentStatus, currentTech) {
+        document.getElementById('modalTicketId').value = ticketId;
+        document.getElementById('modalTicketTitle').innerText = "แก้ไข Ticket: " + ticketId;
+        document.getElementById('modalStatus').value = currentStatus;
+        document.getElementById('modalTechnician').value = (currentTech === "ยังไม่มีผู้รับผิดชอบ") ? "" : currentTech;
+        updateModalObj.show();
+    }
+
+    // บันทึกการอัปเดตสถานะ
+    document.getElementById('updateForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnSaveUpdate');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> กำลังบันทึก...';
+
+        const payload = {
+            action: "updateStatus",
+            ticketId: document.getElementById('modalTicketId').value,
+            repairStatus: document.getElementById('modalStatus').value,
+            technician: document.getElementById('modalTechnician').value.trim() || "ยังไม่มีผู้รับผิดชอบ"
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> บันทึกการเปลี่ยนแปลง';
+            if (data.status === "success") {
+                updateModalObj.hide();
+                loadTickets(); // โหลดตารางใหม่
+            } else {
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> บันทึกการเปลี่ยนแปลง';
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+        });
+    });
+</script>
+
+</body>
+</html>
