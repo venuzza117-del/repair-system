@@ -93,7 +93,7 @@
         
         const btn = e.target.querySelector('button[type="submit"]');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังบันทึกข้อมูล...';
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังตรวจสอบข้อมูล...';
 
         const payload = {
             action: "create",
@@ -113,7 +113,17 @@
             if(data.status === "success") {
                 alert("ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว!\nรหัสติดตามสถานะของคุณคือ: " + data.ticketId);
                 window.location.href = "status.html?ticketId=" + data.ticketId;
-            } else {
+            } 
+            // ⚠️ กรณีปัญหานี้ถูกแจ้งซ้ำ (ห้องเดิม + เลขเครื่องเดิม + ประเภทปัญหาเดิม ที่ยังซ่อมไม่เสร็จ)
+            else if(data.status === "duplicate") {
+                alert("⚠️ ปัญหานี้ได้รับการแจ้งซ่อมไปแล้ว!\n\n" +
+                      "หมายเลข Ticket: " + data.ticketId + "\n" +
+                      "สถานะปัจจุบัน: " + data.currentStatus + "\n" +
+                      "ผู้รับผิดชอบ: " + data.technician + "\n\n" +
+                      "ระบบจะนำคุณไปยังหน้าติดตามสถานะของเคสเดิมครับ");
+                window.location.href = "status.html?ticketId=" + data.ticketId;
+            } 
+            else {
                 alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
@@ -121,7 +131,7 @@
         })
         .catch(err => {
             console.error(err);
-            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ แต่ระบบอาจบันทึกสำเร็จ กรุณาตรวจสอบใน status.html");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
         });
