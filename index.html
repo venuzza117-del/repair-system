@@ -92,6 +92,54 @@
         document.getElementById('roomInput').value = room;
         document.getElementById('pcInput').value = pc;
     };
+<script>
+    // 1. URL ของ Apps Script ที่ได้จาก Step 3 (นำมาวางตรงนี้)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGbf7kEVTgms5GwfJDNTRkwNHXzv4cpA7xUIOSyJkjgQ6EAfsg8fMrumiSxfTkQBc/exec";
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('roomInput').value = urlParams.get('room') || 'ไม่ได้ระบุ';
+        document.getElementById('pcInput').value = urlParams.get('pc') || 'ไม่ได้ระบุ';
+    };
+
+    // 2. เมื่อกดปุ่มส่งฟอร์ม
+    document.getElementById('repairForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังบันทึกข้อมูล...';
+
+        const payload = {
+            action: "create",
+            room: document.getElementById('roomInput').value,
+            pc: document.getElementById('pcInput').value,
+            reporter: e.target.querySelector('input[type="text"]').value,
+            category: e.target.querySelector('select').value,
+            detail: e.target.querySelector('textarea').value
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === "success") {
+                alert("ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว!\nรหัสติดตามสถานะของคุณคือ: " + data.ticketId);
+                // ส่งเสร็จให้ย้ายไปหน้าติดตามสถานะพร้อมส่ง Ticket ID ไปด้วย
+                window.location.href = "status.html?ticketId=" + data.ticketId;
+            } else {
+                alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+                btn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("บันทึกข้อมูลสำเร็จ!");
+            btn.disabled = false;
+        });
+    });
 </script>
 
 </body>
