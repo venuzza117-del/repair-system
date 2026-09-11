@@ -22,7 +22,7 @@
         <div class="card-header header-bg text-center py-4">
             <i class="fa-solid fa-headset fa-3x mb-2"></i>
             <h4 class="mb-0 fw-bold">แจ้งซ่อมคอมพิวเตอร์ห้องเรียน</h4>
-            <p class="small mb-0 opacity-75">ศูนย์เทคโนโลยีสารสนเทศ วิทยาลัย...</p>
+            <p class="small mb-0 opacity-75">ศูนย์เทคโนโลยีสารสนเทศ</p>
         </div>
 
         <div class="card-body p-4">
@@ -64,12 +64,6 @@
                     <textarea class="form-control" rows="3" placeholder="ระบุอาการเพิ่มเติม เช่น เปิดเครื่องแล้วหน้าจอเป็นสีฟ้า..." required></textarea>
                 </div>
 
-                <!-- แนบรูปภาพ -->
-                <div class="mb-4">
-                    <label class="form-label fw-bold"><i class="fa-solid fa-camera"></i> แนบรูปถ่ายหน้าจอ/อุปกรณ์ที่มีปัญหา (ถ้ามี)</label>
-                    <input class="form-control" type="file" accept="image/*" capture="environment">
-                </div>
-
                 <!-- ปุ่มส่งข้อมูล -->
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
@@ -82,27 +76,18 @@
     </div>
 </div>
 
-<!-- JavaScript อ่านค่าจาก URL Parameter (QR Code) -->
+<!-- JavaScript การทำงานของระบบ -->
 <script>
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const room = urlParams.get('room') || 'ไม่ได้ระบุ';
-        const pc = urlParams.get('pc') || 'ไม่ได้ระบุ';
-
-        document.getElementById('roomInput').value = room;
-        document.getElementById('pcInput').value = pc;
-    };
-<script>
-    // 1. URL ของ Apps Script ที่ได้จาก Step 3 (นำมาวางตรงนี้)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGbf7kEVTgms5GwfJDNTRkwNHXzv4cpA7xUIOSyJkjgQ6EAfsg8fMrumiSxfTkQBc/exec";
 
+    // ดึงค่าห้องและเลขเครื่องจาก URL (QR Code)
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         document.getElementById('roomInput').value = urlParams.get('room') || 'ไม่ได้ระบุ';
         document.getElementById('pcInput').value = urlParams.get('pc') || 'ไม่ได้ระบุ';
     };
 
-    // 2. เมื่อกดปุ่มส่งฟอร์ม
+    // ส่งข้อมูลไปยัง Google Sheets
     document.getElementById('repairForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -127,17 +112,18 @@
         .then(data => {
             if(data.status === "success") {
                 alert("ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว!\nรหัสติดตามสถานะของคุณคือ: " + data.ticketId);
-                // ส่งเสร็จให้ย้ายไปหน้าติดตามสถานะพร้อมส่ง Ticket ID ไปด้วย
                 window.location.href = "status.html?ticketId=" + data.ticketId;
             } else {
                 alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
                 btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
             }
         })
         .catch(err => {
             console.error(err);
-            alert("บันทึกข้อมูลสำเร็จ!");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ แต่ระบบอาจบันทึกสำเร็จ กรุณาตรวจสอบใน status.html");
             btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
         });
     });
 </script>
