@@ -1,146 +1,31 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบแจ้งซ่อมคอมพิวเตอร์ - IT Support</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background-color: #f4f6f9; font-family: 'Kanit', sans-serif; }
-        .card-custom { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .header-bg { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; border-radius: 15px 15px 0 0; }
-    </style>
-</head>
-<body>
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>แจ้งปัญหาคอมพิวเตอร์ | IT Helpdesk</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
+:root{--navy:#10243a;--navy2:#173653;--blue:#2563eb;--sky:#eaf2ff;--ink:#172638;--muted:#718096;--line:#e5ebf2;--bg:#f4f7fb;--white:#fff;--green:#15966a;--amber:#c98212;--red:#d94848;--shadow:0 18px 50px rgba(16,36,58,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Kanit','Prompt',sans-serif;min-height:100vh}
+a{text-decoration:none}.page-shell{max-width:1120px;margin:auto;padding:34px 22px 56px}.brandbar{display:flex;align-items:center;gap:12px;margin-bottom:28px}.brandmark{width:46px;height:46px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:21px;box-shadow:0 8px 18px #10243a26}.brandname{font-weight:700;line-height:1.15}.brandname small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:4px}.eyebrow{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--blue);font-weight:600}.page-title{font-size:clamp(25px,4vw,34px);font-weight:700;margin:5px 0 4px;color:var(--navy)}.page-subtitle{color:var(--muted);margin:0}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.panel-head{padding:25px 28px;border-bottom:1px solid var(--line)}.panel-body{padding:28px}.section-label{font-size:15px;font-weight:600;color:var(--navy);margin:0 0 15px}.form-label{font-weight:500;font-size:14px;margin-bottom:8px;color:#34465a}.form-control,.form-select{width:100%;border:1px solid #dbe3ed;border-radius:12px;padding:12px 14px;font:inherit;color:var(--ink);background:#fff;outline:none;transition:.2s}.form-control:focus,.form-select:focus{border-color:#6b9cff;box-shadow:0 0 0 4px #2563eb16}.form-control[readonly]{background:#f1f5fa;color:#42566d;font-weight:600}.field{margin-bottom:19px}.field-hint{font-size:12px;color:var(--muted);margin-top:6px}.btn{border:0;border-radius:12px;padding:12px 18px;font:600 15px 'Kanit',sans-serif;cursor:pointer;transition:.2s}.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px #2563eb30}.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}.btn-dark{background:var(--navy);color:#fff}.btn-outline{background:#fff;border:1px solid var(--line);color:var(--navy)}.btn:disabled{opacity:.6;cursor:wait}.btn-block{width:100%}.iconbox{width:38px;height:38px;border-radius:12px;background:var(--sky);color:var(--blue);display:grid;place-items:center;flex:none}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.info-card{padding:15px;border:1px solid var(--line);background:#f8fafd;border-radius:14px}.info-card label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.info-card strong{font-size:16px;color:var(--navy)}.notice{background:#f0f6ff;border:1px solid #dbe8ff;color:#315783;padding:13px 15px;border-radius:13px;font-size:13px}.footer{text-align:center;color:#91a0b2;font-size:12px;margin-top:24px}.status-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:600;background:#edf1f5;color:#586779}.status-pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}.s-pending{background:#fff5df;color:#a66a08}.s-progress{background:#eaf2ff;color:#2563eb}.s-done{background:#e7f7ef;color:#13865c}.s-cancel{background:#ffeded;color:#c43c3c}
+@media(max-width:640px){.page-shell{padding:22px 14px 38px}.panel-head,.panel-body{padding:20px}.info-grid{gap:9px}.page-title{font-size:26px}}
 
-<div class="container py-4" style="max-width: 600px;">
-    <div class="card card-custom">
-        <!-- Header -->
-        <div class="card-header header-bg text-center py-4">
-            <i class="fa-solid fa-headset fa-3x mb-2"></i>
-            <h4 class="mb-0 fw-bold">แจ้งซ่อมคอมพิวเตอร์ห้องเรียน</h4>
-            <p class="small mb-0 opacity-75">ศูนย์เทคโนโลยีสารสนเทศ</p>
-        </div>
-
-        <div class="card-body p-4">
-            <form id="repairForm">
-                
-                <!-- ข้อมูลที่ดึงจาก QR Code (Readonly) -->
-                <div class="row g-2 mb-3">
-                    <div class="col-6">
-                        <label class="form-label fw-bold text-secondary"><i class="fa-solid fa-door-open"></i> ห้องเรียน</label>
-                        <input type="text" id="roomInput" class="form-control bg-light" readonly placeholder="กำลังโหลด...">
-                    </div>
-                    <div class="col-6">
-                        <label class="form-label fw-bold text-secondary"><i class="fa-solid fa-desktop"></i> เลขเครื่อง</label>
-                        <input type="text" id="pcInput" class="form-control bg-light" readonly placeholder="กำลังโหลด...">
-                    </div>
-                </div>
-
-                <!-- ผู้แจ้งเรื่อง -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold"><i class="fa-solid fa-user"></i> ชื่อผู้แจ้ง / รหัสนักศึกษา</label>
-                    <input type="text" class="form-control" placeholder="เช่น นายสมชาย ใจดี (66301...)" required>
-                </div>
-
-                <!-- เลือกหมวดหมู่ปัญหา -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold"><i class="fa-solid fa-triangle-exclamation"></i> ประเภทปัญหา</label>
-                    <select class="form-select" required>
-                        <option value="" selected disabled>-- กรุณาเลือกประเภทปัญหา --</option>
-                        <option value="hardware">อุปกรณ์ฮาร์ดแวร์ (จอ ดับ, เมาส์/คีย์บอร์ด เสีย)</option>
-                        <option value="software">โปรแกรม / ซอฟต์แวร์ (เข้าไม่ได้, เปิดไม่ติด)</option>
-                        <option value="network">ระบบเครือข่าย / อินเทอร์เน็ต</option>
-                        <option value="other">อื่นๆ</option>
-                    </select>
-                </div>
-
-                <!-- รายละเอียดเพิ่มเติม -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold"><i class="fa-solid fa-pen-to-square"></i> รายละเอียดอาการเสีย</label>
-                    <textarea class="form-control" rows="3" placeholder="ระบุอาการเพิ่มเติม เช่น เปิดเครื่องแล้วหน้าจอเป็นสีฟ้า..." required></textarea>
-                </div>
-
-                <!-- ปุ่มส่งข้อมูล -->
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
-                        <i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- JavaScript การทำงานของระบบ -->
+.hero{background:linear-gradient(125deg,#10243a,#1d4669);border-radius:22px;padding:27px 30px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden}.hero:after{content:' ';position:absolute;width:210px;height:210px;border:34px solid #ffffff12;border-radius:50%;right:-55px;top:-85px}.hero h1{font-size:27px;margin:8px 0 3px}.hero p{margin:0;color:#d3e1ef;font-size:14px}.hero-tag{font-size:11px;letter-spacing:1.5px;color:#9fc5ff}.form-section+.form-section{border-top:1px solid var(--line);padding-top:23px;margin-top:23px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.submit-note{text-align:center;font-size:12px;color:var(--muted);margin-top:12px}@media(max-width:520px){.two-col{grid-template-columns:1fr}}
+</style></head><body><main class="page-shell" style="max-width:760px">
+<div class="brandbar"><div class="brandmark"><i class="fa-solid fa-screwdriver-wrench"></i></div><div class="brandname">IT HELPDESK<small>Computer Support Service</small></div></div>
+<section class="hero"><div class="hero-tag">STUDENT SERVICE PORTAL</div><h1>แจ้งปัญหาคอมพิวเตอร์</h1><p>แจ้งปัญหาการใช้งาน แจ้งได้ง่ายผ่านระบบออนไลน์</p></section>
+<section class="panel"><div class="panel-head"><div class="eyebrow">Repair request</div><h2 class="page-title" style="font-size:23px">แบบฟอร์มแจ้งซ่อม</h2><p class="page-subtitle">กรุณากรอกข้อมูลให้ครบถ้วน เพื่อให้เจ้าหน้าที่ตรวจสอบได้รวดเร็ว</p></div>
+<div class="panel-body"><form id="repairForm">
+<div class="form-section"><h3 class="section-label"><i class="fa-solid fa-computer" style="color:#2563eb;margin-right:8px"></i>ข้อมูลอุปกรณ์</h3>
+<div class="info-grid"><div class="info-card"><label>ห้องคอมพิวเตอร์</label><strong id="roomDisplay">กำลังโหลด...</strong></div><div class="info-card"><label>หมายเลขเครื่อง</label><strong id="pcDisplay">กำลังโหลด...</strong></div></div>
+<div class="two-col" style="margin-top:14px"><div><label class="form-label" for="roomInput">รหัสห้อง</label><input id="roomInput" class="form-control" readonly></div><div><label class="form-label" for="pcInput">เลขเครื่อง</label><input id="pcInput" class="form-control" readonly></div></div></div>
+<div class="form-section"><h3 class="section-label"><i class="fa-regular fa-clipboard" style="color:#2563eb;margin-right:8px"></i>รายละเอียดผู้แจ้งและปัญหา</h3>
+<div class="field"><label class="form-label" for="reporterInput">ชื่อผู้แจ้ง / รหัสนักศึกษา</label><input id="reporterInput" type="text" class="form-control" placeholder="เช่น สมชาย ใจดี / 66301xxx" required></div>
+<div class="field"><label class="form-label" for="categoryInput">ประเภทปัญหา</label><select id="categoryInput" class="form-select" required><option value="" selected disabled>เลือกประเภทปัญหา</option><option value="hardware">อุปกรณ์ฮาร์ดแวร์ (จอภาพ เมาส์ คีย์บอร์ด)</option><option value="software">โปรแกรม / ซอฟต์แวร์</option><option value="network">ระบบเครือข่าย / อินเทอร์เน็ต</option><option value="other">อื่น ๆ</option></select></div>
+<div class="field"><label class="form-label" for="detailInput">รายละเอียดอาการเสีย</label><textarea id="detailInput" class="form-control" rows="4" placeholder="อธิบายอาการที่พบ เช่น เปิดเครื่องแล้วหน้าจอไม่แสดงผล..." required></textarea><div class="field-hint">ระบุอาการให้ชัดเจน เพื่อช่วยให้เจ้าหน้าที่แก้ไขได้ตรงจุด</div></div></div>
+<button type="submit" class="btn btn-primary btn-block" id="submitBtn"><i class="fa-solid fa-paper-plane" style="margin-right:8px"></i>ส่งรายการแจ้งซ่อม</button><div class="submit-note"><i class="fa-solid fa-shield-halved"></i> ข้อมูลของคุณจะถูกส่งไปยังเจ้าหน้าที่ผู้ดูแลระบบ</div>
+</form></div></section><div class="footer">IT HELPDESK · Computer Laboratory Support</div></main>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsaeguSVXd7EI0b1uo-ch6djx4B2dp8SU6ocnKa5DBRNnk-tZ5qyh9t1cEWWmWT0U/exec";
-
-    // ดึงค่าห้องและเลขเครื่องจาก URL (QR Code)
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        document.getElementById('roomInput').value = urlParams.get('room') || 'ไม่ได้ระบุ';
-        document.getElementById('pcInput').value = urlParams.get('pc') || 'ไม่ได้ระบุ';
-    };
-
-    // ส่งข้อมูลไปยัง Google Sheets
-    document.getElementById('repairForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>กำลังตรวจสอบข้อมูล...';
-
-        const payload = {
-            action: "create",
-            room: document.getElementById('roomInput').value,
-            pc: document.getElementById('pcInput').value,
-            reporter: e.target.querySelector('input[type="text"]').value,
-            category: e.target.querySelector('select').value,
-            detail: e.target.querySelector('textarea').value
-        };
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === "success") {
-                alert("ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว!\nรหัสติดตามสถานะของคุณคือ: " + data.ticketId);
-                window.location.href = "status.html?ticketId=" + data.ticketId;
-            } 
-            // ⚠️ กรณีปัญหานี้ถูกแจ้งซ้ำ (ห้องเดิม + เลขเครื่องเดิม + ประเภทปัญหาเดิม ที่ยังซ่อมไม่เสร็จ)
-            else if(data.status === "duplicate") {
-                alert("⚠️ ปัญหานี้ได้รับการแจ้งซ่อมไปแล้ว!\n\n" +
-                      "หมายเลข Ticket: " + data.ticketId + "\n" +
-                      "สถานะปัจจุบัน: " + data.currentStatus + "\n" +
-                      "ผู้รับผิดชอบ: " + data.technician + "\n\n" +
-                      "ระบบจะนำคุณไปยังหน้าติดตามสถานะของเคสเดิมครับ");
-                window.location.href = "status.html?ticketId=" + data.ticketId;
-            } 
-            else {
-                alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>ส่งเรื่องแจ้งซ่อม';
-        });
-    });
-</script>
-
-</body>
-</html>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsaeguSVXd7EI0b1uo-ch6djx4B2dp8SU6ocnKa5DBRNnk-tZ5qyh9t1cEWWmWT0U/exec";
+window.addEventListener('DOMContentLoaded',()=>{const p=new URLSearchParams(location.search);const room=p.get('room')||'ไม่ได้ระบุ';const pc=p.get('pc')||'ไม่ได้ระบุ';document.getElementById('roomInput').value=room;document.getElementById('pcInput').value=pc;document.getElementById('roomDisplay').textContent=room;document.getElementById('pcDisplay').textContent=pc;});
+document.getElementById('repairForm').addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูล...';
+const payload={action:"create",room:document.getElementById('roomInput').value,pc:document.getElementById('pcInput').value,reporter:document.getElementById('reporterInput').value,category:document.getElementById('categoryInput').value,detail:document.getElementById('detailInput').value};
+try{const res=await fetch(SCRIPT_URL,{method:'POST',mode:'cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});const data=await res.json();if(data.status==="success"){alert("ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว! รหัสติดตาม: "+data.ticketId);location.href="status.html?ticketId="+encodeURIComponent(data.ticketId);}else if(data.status==="duplicate"){alert("รายการนี้ถูกรายงานแล้ว รหัสติดตาม: "+data.ticketId+"\nสถานะ: "+data.currentStatus);location.href="status.html?ticketId="+encodeURIComponent(data.ticketId);}else throw new Error("ส่งข้อมูลไม่สำเร็จ");}catch(err){alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่");btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane" style="margin-right:8px"></i>ส่งรายการแจ้งซ่อม';}});
+</script></body></html>

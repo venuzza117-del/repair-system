@@ -1,159 +1,21 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ติดตามสถานะการแจ้งซ่อม - IT Support</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background-color: #f4f6f9; font-family: 'Kanit', sans-serif; }
-        .card-custom { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .header-bg { background: linear-gradient(135deg, #198754, #146c43); color: white; border-radius: 15px 15px 0 0; }
-        .badge-status { font-size: 0.95rem; padding: 8px 16px; border-radius: 20px; }
-    </style>
-</head>
-<body>
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ติดตามสถานะ | IT Helpdesk</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
+:root{--navy:#10243a;--navy2:#173653;--blue:#2563eb;--sky:#eaf2ff;--ink:#172638;--muted:#718096;--line:#e5ebf2;--bg:#f4f7fb;--white:#fff;--green:#15966a;--amber:#c98212;--red:#d94848;--shadow:0 18px 50px rgba(16,36,58,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Kanit','Prompt',sans-serif;min-height:100vh}
+a{text-decoration:none}.page-shell{max-width:1120px;margin:auto;padding:34px 22px 56px}.brandbar{display:flex;align-items:center;gap:12px;margin-bottom:28px}.brandmark{width:46px;height:46px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:21px;box-shadow:0 8px 18px #10243a26}.brandname{font-weight:700;line-height:1.15}.brandname small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:4px}.eyebrow{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--blue);font-weight:600}.page-title{font-size:clamp(25px,4vw,34px);font-weight:700;margin:5px 0 4px;color:var(--navy)}.page-subtitle{color:var(--muted);margin:0}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.panel-head{padding:25px 28px;border-bottom:1px solid var(--line)}.panel-body{padding:28px}.section-label{font-size:15px;font-weight:600;color:var(--navy);margin:0 0 15px}.form-label{font-weight:500;font-size:14px;margin-bottom:8px;color:#34465a}.form-control,.form-select{width:100%;border:1px solid #dbe3ed;border-radius:12px;padding:12px 14px;font:inherit;color:var(--ink);background:#fff;outline:none;transition:.2s}.form-control:focus,.form-select:focus{border-color:#6b9cff;box-shadow:0 0 0 4px #2563eb16}.form-control[readonly]{background:#f1f5fa;color:#42566d;font-weight:600}.field{margin-bottom:19px}.field-hint{font-size:12px;color:var(--muted);margin-top:6px}.btn{border:0;border-radius:12px;padding:12px 18px;font:600 15px 'Kanit',sans-serif;cursor:pointer;transition:.2s}.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px #2563eb30}.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}.btn-dark{background:var(--navy);color:#fff}.btn-outline{background:#fff;border:1px solid var(--line);color:var(--navy)}.btn:disabled{opacity:.6;cursor:wait}.btn-block{width:100%}.iconbox{width:38px;height:38px;border-radius:12px;background:var(--sky);color:var(--blue);display:grid;place-items:center;flex:none}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.info-card{padding:15px;border:1px solid var(--line);background:#f8fafd;border-radius:14px}.info-card label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.info-card strong{font-size:16px;color:var(--navy)}.notice{background:#f0f6ff;border:1px solid #dbe8ff;color:#315783;padding:13px 15px;border-radius:13px;font-size:13px}.footer{text-align:center;color:#91a0b2;font-size:12px;margin-top:24px}.status-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:600;background:#edf1f5;color:#586779}.status-pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}.s-pending{background:#fff5df;color:#a66a08}.s-progress{background:#eaf2ff;color:#2563eb}.s-done{background:#e7f7ef;color:#13865c}.s-cancel{background:#ffeded;color:#c43c3c}
+@media(max-width:640px){.page-shell{padding:22px 14px 38px}.panel-head,.panel-body{padding:20px}.info-grid{gap:9px}.page-title{font-size:26px}}
 
-<div class="container py-4" style="max-width: 600px;">
-    <div class="card card-custom">
-        <!-- Header -->
-        <div class="card-header header-bg text-center py-4">
-            <i class="fa-solid fa-magnifying-glass-chart fa-3x mb-2"></i>
-            <h4 class="mb-0 fw-bold">ติดตามสถานะการแจ้งซ่อม</h4>
-            <p class="small mb-0 opacity-75">ตรวจสอบความคืบหน้างานซ่อมคอมพิวเตอร์</p>
-        </div>
-
-        <div class="card-body p-4">
-            <!-- ค้นหาด้วย Ticket ID -->
-            <div class="input-group mb-4">
-                <input type="text" id="searchTicketId" class="form-control form-control-lg" placeholder="พิมพ์ รหัสแจ้งซ่อม (เช่น TK-1001)">
-                <button class="btn btn-success px-4" type="button" id="btnSearch">
-                    <i class="fa-solid fa-search me-1"></i> ค้นหา
-                </button>
-            </div>
-
-            <!-- ข้อความกำลังโหลด -->
-            <div id="loading" class="text-center py-4 d-none">
-                <div class="spinner-border text-success" role="status"></div>
-                <p class="mt-2 text-muted">กำลังดึงข้อมูลสถานะล่าสุด...</p>
-            </div>
-
-            <!-- ข้อความเมื่อไม่พบข้อมูล -->
-            <div id="notFound" class="alert alert-warning text-center d-none" role="alert">
-                <i class="fa-solid fa-circle-exclamation me-2"></i>ไม่พบข้อมูลรหัสแจ้งซ่อมนี้ กรุณาตรวจสอบรหัสใหม่อีกครั้ง
-            </div>
-
-            <!-- การแสดงผลรายละเอียด Ticket -->
-            <div id="resultCard" class="card bg-light border-0 d-none">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <span class="fw-bold fs-5 text-primary" id="resTicketId">TK-XXXX</span>
-                        <span id="resStatusBadge" class="badge badge-status bg-secondary">กำลังตรวจสอบ</span>
-                    </div>
-
-                    <div class="row g-2 small text-secondary mb-3">
-                        <div class="col-6"><i class="fa-solid fa-door-open me-1"></i> <strong>ห้อง:</strong> <span id="resRoom">-</span></div>
-                        <div class="col-6"><i class="fa-solid fa-desktop me-1"></i> <strong>เลขเครื่อง:</strong> <span id="resPc">-</span></div>
-                        <div class="col-12"><i class="fa-solid fa-user me-1"></i> <strong>ผู้แจ้ง:</strong> <span id="resReporter">-</span></div>
-                        <div class="col-12"><i class="fa-solid fa-clock me-1"></i> <strong>เวลาแจ้ง:</strong> <span id="resTime">-</span></div>
-                    </div>
-
-                    <div class="p-3 bg-white rounded border mb-3">
-                        <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-wrench me-1"></i> อาการที่แจ้ง:</div>
-                        <p class="mb-0 text-muted small" id="resDetail">-</p>
-                    </div>
-
-                    <div class="p-3 bg-white rounded border">
-                        <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-user-gear me-1"></i> ช่างผู้ดูแล:</div>
-                        <p class="mb-0 fw-bold text-success" id="resTechnician">กำลังรอดำเนินการจัดสรรช่าง</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-4">
-                <a href="index.html" class="text-decoration-none small text-secondary">
-                    <i class="fa-solid fa-arrow-left me-1"></i> กลับไปหน้าแจ้งซ่อม
-                </a>
-            </div>
-
-        </div>
-    </div>
-</div>
-
+.search-row{display:flex;gap:10px}.search-row input{flex:1}.result{margin-top:22px;border:1px solid var(--line);border-radius:17px;overflow:hidden}.result-head{padding:20px;background:#f8fafd;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line)}.result-body{padding:22px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail{padding:13px;border:1px solid var(--line);border-radius:12px}.detail small{display:block;color:var(--muted);font-size:12px}.detail strong{display:block;margin-top:3px}.description{background:#f8fafd;border-radius:13px;padding:16px;margin-top:16px}.stepbar{display:flex;align-items:center;gap:8px;margin:18px 0 4px}.step{height:6px;flex:1;border-radius:8px;background:#e6ebf2}.step.active{background:#2563eb}.hidden{display:none!important}@media(max-width:520px){.search-row{flex-direction:column}.detail-grid{grid-template-columns:1fr 1fr}.result-head{align-items:flex-start;flex-direction:column}}
+</style></head><body><main class="page-shell" style="max-width:760px"><div class="brandbar"><div class="brandmark"><i class="fa-solid fa-screwdriver-wrench"></i></div><div class="brandname">IT HELPDESK<small>Computer Support Service</small></div></div>
+<div style="margin-bottom:22px"><div class="eyebrow">Track your request</div><h1 class="page-title">ติดตามสถานะการแจ้งซ่อม</h1><p class="page-subtitle">ตรวจสอบความคืบหน้าการแก้ไขปัญหาคอมพิวเตอร์ของคุณ</p></div>
+<section class="panel"><div class="panel-body"><h2 class="section-label">ค้นหาด้วยรหัสแจ้งซ่อม (Ticket ID)</h2><div class="search-row"><input id="searchTicketId" class="form-control" placeholder="ตัวอย่าง TK-1001"><button id="btnSearch" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass" style="margin-right:6px"></i>ค้นหา</button></div>
+<div id="loading" class="text-center py-4 hidden"><div class="spinner-border text-primary"></div><p class="text-muted mt-2 mb-0">กำลังตรวจสอบข้อมูลล่าสุด...</p></div><div id="notFound" class="notice hidden" style="margin-top:18px;background:#fff7e8;border-color:#f7dfb2;color:#95620d"><i class="fa-solid fa-circle-exclamation"></i> ไม่พบรหัสแจ้งซ่อมนี้ กรุณาตรวจสอบอีกครั้ง</div>
+<div id="resultCard" class="result hidden"><div class="result-head"><div><small style="color:var(--muted)">TICKET NUMBER</small><div id="resTicketId" style="font-size:20px;font-weight:700;color:var(--navy)">TK-XXXX</div></div><span id="resStatusBadge" class="status-pill s-pending">รอดำเนินการ</span></div><div class="result-body"><div class="detail-grid"><div class="detail"><small>ห้องคอมพิวเตอร์</small><strong id="resRoom">-</strong></div><div class="detail"><small>หมายเลขเครื่อง</small><strong id="resPc">-</strong></div><div class="detail"><small>ผู้แจ้ง</small><strong id="resReporter">-</strong></div><div class="detail"><small>วันที่แจ้ง</small><strong id="resTime">-</strong></div></div><div class="description"><small style="color:var(--muted)">รายละเอียดปัญหา</small><p id="resDetail" style="margin:6px 0 0">-</p></div><div style="margin-top:17px"><small style="color:var(--muted)">เจ้าหน้าที่ผู้รับผิดชอบ</small><div id="resTechnician" style="font-weight:600;margin-top:4px">ยังไม่มีผู้รับเรื่อง</div></div><div class="stepbar" id="stepbar"><div class="step"></div><div class="step"></div><div class="step"></div></div><div id="stepCaption" class="field-hint">ระบบจะแสดงความคืบหน้าตามสถานะล่าสุด</div></div></div>
+<div style="text-align:center;margin-top:22px"><a href="index.html" style="color:#2563eb;font-size:13px"><i class="fa-solid fa-arrow-left" style="margin-right:6px"></i>กลับไปหน้าแจ้งปัญหา</a></div></div></section><div class="footer">IT HELPDESK · Computer Laboratory Support</div></main>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsaeguSVXd7EI0b1uo-ch6djx4B2dp8SU6ocnKa5DBRNnk-tZ5qyh9t1cEWWmWT0U/exec";
-
-    // เมื่อโหลดหน้าเว็บ ให้เช็คว่ามี Ticket ID ติดมาใน URL หรือไม่
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const ticketId = urlParams.get('ticketId');
-        if (ticketId) {
-            document.getElementById('searchTicketId').value = ticketId;
-            fetchTicketStatus(ticketId);
-        }
-    };
-
-    // ปุ่มกดค้นหา
-    document.getElementById('btnSearch').addEventListener('click', function() {
-        const ticketId = document.getElementById('searchTicketId').value.trim();
-        if (ticketId) {
-            fetchTicketStatus(ticketId);
-        } else {
-            alert("กรุณากรอกรหัสแจ้งซ่อม (Ticket ID)");
-        }
-    });
-
-    // ฟังก์ชันดึงข้อมูลสถานะจาก Apps Script
-    function fetchTicketStatus(ticketId) {
-        // ซ่อนหน้าจอผลลัพธ์เดิม
-        document.getElementById('resultCard').classList.add('d-none');
-        document.getElementById('notFound').classList.add('d-none');
-        document.getElementById('loading').classList.remove('d-none');
-
-        fetch(SCRIPT_URL + "?action=getStatus&ticketId=" + encodeURIComponent(ticketId))
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('loading').classList.add('d-none');
-            
-            if (data.status === "found") {
-                const item = data.data;
-                document.getElementById('resTicketId').innerText = item.ticketId;
-                document.getElementById('resRoom').innerText = item.room;
-                document.getElementById('resPc').innerText = item.pc;
-                document.getElementById('resReporter').innerText = item.reporter;
-                document.getElementById('resTime').innerText = item.timestamp;
-                document.getElementById('resDetail').innerText = item.detail;
-                document.getElementById('resTechnician').innerText = item.technician || "ยังไม่มีผู้รับเรื่อง";
-
-                // จัดการสีของ Badge ตามสถานะ
-                const badge = document.getElementById('resStatusBadge');
-                badge.innerText = item.repairStatus;
-                
-                if (item.repairStatus === "เสร็จสิ้น") {
-                    badge.className = "badge badge-status bg-success";
-                } else if (item.repairStatus === "กำลังดำเนินการ") {
-                    badge.className = "badge badge-status bg-warning text-dark";
-                } else if (item.repairStatus === "ยกเลิก") {
-                    badge.className = "badge badge-status bg-danger";
-                } else {
-                    badge.className = "badge badge-status bg-secondary";
-                }
-
-                document.getElementById('resultCard').classList.remove('d-none');
-            } else {
-                document.getElementById('notFound').classList.remove('d-none');
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById('loading').classList.add('d-none');
-            alert("เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง");
-        });
-    }
-</script>
-
-</body>
-</html>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsaeguSVXd7EI0b1uo-ch6djx4B2dp8SU6ocnKa5DBRNnk-tZ5qyh9t1cEWWmWT0U/exec";
+const el=id=>document.getElementById(id);function statusClass(s){if(s==="เสร็จสิ้น")return"s-done";if(s==="กำลังดำเนินการ")return"s-progress";if(s==="ยกเลิก")return"s-cancel";return"s-pending"}
+function updateSteps(s){const steps=[...document.querySelectorAll('#stepbar .step')];let n=s==="เสร็จสิ้น"?3:s==="กำลังดำเนินการ"?2:s==="ยกเลิก"?0:1;steps.forEach((x,i)=>x.classList.toggle('active',i<n));el('stepCaption').textContent=s==="เสร็จสิ้น"?"ดำเนินการซ่อมเสร็จเรียบร้อยแล้ว":s==="กำลังดำเนินการ"?"เจ้าหน้าที่กำลังดำเนินการแก้ไขปัญหา":s==="ยกเลิก"?"รายการนี้ถูกยกเลิก":"รายการของคุณอยู่ในคิวรอดำเนินการ";}
+async function fetchTicketStatus(id){el('resultCard').classList.add('hidden');el('notFound').classList.add('hidden');el('loading').classList.remove('hidden');try{const r=await fetch(SCRIPT_URL+"?action=getStatus&ticketId="+encodeURIComponent(id));const d=await r.json();el('loading').classList.add('hidden');if(d.status==="found"){const x=d.data;el('resTicketId').textContent=x.ticketId;el('resRoom').textContent=x.room;el('resPc').textContent=x.pc;el('resReporter').textContent=x.reporter;el('resTime').textContent=x.timestamp;el('resDetail').textContent=x.detail;el('resTechnician').textContent=x.technician||"ยังไม่มีผู้รับเรื่อง";el('resStatusBadge').textContent=x.repairStatus;el('resStatusBadge').className="status-pill "+statusClass(x.repairStatus);updateSteps(x.repairStatus);el('resultCard').classList.remove('hidden');}else el('notFound').classList.remove('hidden');}catch(e){el('loading').classList.add('hidden');alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่");}}
+el('btnSearch').addEventListener('click',()=>{const id=el('searchTicketId').value.trim();if(id)fetchTicketStatus(id);else alert("กรุณากรอกรหัสแจ้งซ่อม");});el('searchTicketId').addEventListener('keydown',e=>{if(e.key==="Enter"){e.preventDefault();el('btnSearch').click();}});window.addEventListener('DOMContentLoaded',()=>{const id=new URLSearchParams(location.search).get('ticketId');if(id){el('searchTicketId').value=id;fetchTicketStatus(id);}});
+</script></body></html>
